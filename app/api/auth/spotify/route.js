@@ -52,6 +52,9 @@ export async function GET(request) {
 
     const pic = sortedImages[0].url;
 
+    var currentDate = new Date();
+    let fiftyMinutesInMs = 50 * 60 * 1000;
+    var needs_refresh = new Date(currentDate.getTime() + fiftyMinutesInMs);
     // Save user in firebase
     const user = {
       spotifyId: spotifyUser.data.id,
@@ -61,9 +64,9 @@ export async function GET(request) {
       refresh_token: spotifyResponse.data.refresh_token,
       expires_in: spotifyResponse.data.expires_in,
       profilePic: pic,
-      created_at: new Date(),
-      updated_at: new Date(),
-      needs_refresh: new Date() + spotifyResponse.data.expires_in - 300,
+      created_at: currentDate,
+      updated_at: currentDate,
+      needs_refresh: needs_refresh,
     };
     console.log('logging out user', user);
 
@@ -77,8 +80,8 @@ export async function GET(request) {
         access_token: spotifyResponse.data.access_token,
         refresh_token: spotifyResponse.data.refresh_token,
         expires_in: spotifyResponse.data.expires_in,
-        updated_at: new Date(),
-        needs_refresh: new Date() + spotifyResponse.data.expires_in - 300,
+        updated_at: currentDate,
+        needs_refresh: needs_refresh,
       });
     } else {
       const docRef = await addDoc(collection(db, 'users'), user);
