@@ -11,9 +11,12 @@
 const {onSchedule} = require("firebase-functions/v2/scheduler");
 const { defineString } = require('firebase-functions/params');
 const {logger} = require("firebase-functions");
+const { onRequest } = require("firebase-functions/v2/https");
 
 const axios = require("axios");
 const admin = require("firebase-admin");
+const qs = require('qs');
+
 const { log } = require("firebase-functions/logger");
 admin.initializeApp();  
 
@@ -27,6 +30,12 @@ exports.refreshTokens = onSchedule("every 2 minutes", async (event) => {
   await runRefreshTokens();
 });
 
+//Add a onRequest function to call my refreshTokens function
+exports.refreshTokensRequest = onRequest(async (req, res) => {
+  await runRefreshTokens();
+  res.send("Refreshed tokens");
+});
+
 
 
 async function refreshUserToken(user) {
@@ -36,10 +45,11 @@ async function refreshUserToken(user) {
       const client_secret = CLIENT_SECRET.value();
       const base64Code = ("Basic " + (new Buffer.from(client_id + ':' + client_secret).toString('base64')));
       const userId = user.id;
-      const response = await axios.post("https://accounts.spotify.com/api/token", {
+      const requestData = qs.stringify({
         grant_type: "refresh_token",
         refresh_token: user.refresh_token
-      }, {
+      });
+      const response = await axios.post("https://accounts.spotify.com/api/token", requestData, {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "Authorization": base64Code
@@ -47,13 +57,18 @@ async function refreshUserToken(user) {
       });
       logger.info('logging out spotify response', response.data);
       const newAccessToken = response.data["access_token"];
+      var currentDate = new Date();
+      let fiftyMinutesInMs = 50 * 60 * 1000;
+      var newRefreshTime = new Date(currentDate.getTime() + fiftyMinutesInMs);
       await admin.firestore().collection("users").doc(`${userId}`).update({
         access_token: newAccessToken,
-        updated_at: new Date(),
-        needs_refresh: new Date(Date.now() + 3000),
+        updated_at: currentDate,
+        needs_refresh: newRefreshTime,
       });
       return newAccessToken;
     } catch (error) {
+      //log out the response body from this 400 error response
+      logger.error(JSON.stringify(error.response.data));
       logger.error(JSON.stringify(error));
       throw error;
     }

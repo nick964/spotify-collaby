@@ -23,6 +23,16 @@
           "uriFormat": "%s",
           "action": "debugWithChrome"
         }
+      },
+      {
+        "type": "node",
+        "request": "attach",
+        "name": "Attach to Functions Emulator",
+        "port": 9229, // Default port for Node.js debugger
+        "restart": true,
+        "skipFiles": ["<node_internals>/**"],
+        "sourceMaps": true
       }
+      
     ]
   }
