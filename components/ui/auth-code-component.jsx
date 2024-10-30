@@ -36,7 +36,6 @@ const AuthCodeComponent = () => {
             setError(data.error);
           }
         } catch (err) {
-          console.log
           setError('Failed to fetch token');
         } finally {
           setIsLoading(false);

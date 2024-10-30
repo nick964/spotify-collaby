@@ -21,7 +21,7 @@ const SpotifyLogin = () => {
             <button onClick={handleLogin}>
                 Login with Spotify
             </button>
-            
+
         </div>
     );
 };
