@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { db } from '../../../../lib/firebase';
+import { db } from '@/lib/firebase';
 import { addDoc, getDocs, collection, query, where, updateDoc } from 'firebase/firestore';
 
 export async function POST(request) {
