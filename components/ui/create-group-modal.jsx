@@ -42,7 +42,7 @@ export function CreateGroupModal({ open, onOpenChange, onSubmit, userId, userNam
               type="button"
               variant="outline"
               onClick={() => onOpenChange(false)}
-              className="border-neutral-600 text-white hover:bg-neutral-700"
+              className="border-neutral-600 hover:bg-neutral-700"
             >
               Cancel
             </Button>

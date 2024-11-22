@@ -10,6 +10,7 @@ import { GroupCard } from "@/components/ui/group-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { db } from '@/lib/firebase';
 import { addDoc, getDocs, collection, query, where, updateDoc } from 'firebase/firestore';
+import  Image  from 'next/image';
 
 
 export default function ProfilePage() {
@@ -29,16 +30,12 @@ export default function ProfilePage() {
         await addDoc(collection(db, 'groups'), group);
   };
 
-  const handleInviteUser = async (groupName) => {
-    // const groupRef = doc(db, 'groups', groupId);
-    // await updateDoc(groupRef, {
-    //   members: arrayUnion(userId),
-    // });
-  }
+
 
   useEffect(() => {
     const fetchGroups = async () => {
       if (session && session.user) {
+        console.log("user Data", session.user);
         console.log("User ID:", session.user.userId);
         const q = query(collection(db, 'groups'), where('members', 'array-contains', session.user.userId));
         const querySnapshot = await getDocs(q);
@@ -69,7 +66,7 @@ export default function ProfilePage() {
             <Card className="w-full md:w-1/3 bg-neutral-800 border-neutral-700 p-6">
               <div className="flex flex-col items-center text-center">
                 <div className="w-24 h-24 bg-neutral-700 rounded-full flex items-center justify-center mb-4">
-                  <Music2 className="h-12 w-12 text-[#1DB954]" />
+                  <Image src={session.user.image} alt={session.user.name} width={96} height={96} className="rounded-full" />
                 </div>
                 <h2 className="text-2xl font-bold text-white mb-2"></h2>
                 <p className="text-gray-400 mb-4">{session.user.name}</p>
@@ -113,6 +110,7 @@ export default function ProfilePage() {
                     groupName={group.name}
                     membersCount={group.members.length}
                     updatedTime="5 days ago"
+                    groupId={group.id}
                   />
                 ))}
               </div>
@@ -126,6 +124,8 @@ export default function ProfilePage() {
         onOpenChange={setIsCreateModalOpen}
         onSubmit={handleCreateGroup}
       />
+
+
 
     </main>
   );
