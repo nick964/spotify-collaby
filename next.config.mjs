@@ -3,7 +3,7 @@ const nextConfig = {
     productionBrowserSourceMaps: true,
     reactStrictMode: false,
     images: {
-        domains: ['scontent-iad3-1.xx.fbcdn.net'],
+        domains: ['scontent-lga3-1.xx.fbcdn.net'],
     },
 };
 

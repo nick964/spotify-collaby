@@ -10,8 +10,8 @@ export default function Home() {
         <div className="mx-auto max-w-6xl pt-20 pb-32 sm:pt-48 sm:pb-40">
           <div className="text-center">
             <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl">
-              Your Friend Group's
-              <span className="text-[#1DB954] block">Perfect Playlist</span>
+              Yoooo
+              <span className="text-[#1DB954] block">What we listening to?</span>
             </h1>
             <p className="mt-6 text-lg leading-8 text-gray-300">
               Automatically generate Spotify playlists that perfectly blend everyone's music taste.
