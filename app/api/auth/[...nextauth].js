@@ -9,8 +9,8 @@ export const authOptions = {
       clientSecret: process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_SECRET,
       
     }),
-    // ...add more providers here
   ],
+  secret: process.env.NEXT_AUTH_SECRET,
 }
 
 export default NextAuth(authOptions)
